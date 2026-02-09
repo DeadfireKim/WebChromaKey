@@ -261,8 +261,8 @@ export default function ChromaKeyPage() {
             </div>
           </div>
 
-          {/* Controls Sidebar */}
-          <div className="space-y-6">
+          {/* Controls Sidebar - Scrollable */}
+          <div className="space-y-6 max-h-[85vh] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent">
             {/* Camera Controls */}
             <div className="bg-card border border-border rounded-lg p-6">
               <h2 className="text-xl font-semibold mb-4">카메라 설정</h2>
@@ -287,12 +287,6 @@ export default function ChromaKeyPage() {
                 onQualityChange={handleQualityChange}
                 disabled={!isActive || isInitializing}
               />
-              {/* Debug Info */}
-              {(!isActive || isInitializing) && (
-                <div className="mt-2 p-2 bg-yellow-500/10 border border-yellow-500/20 rounded text-xs text-yellow-600">
-                  ⚠️ 토글 비활성화됨: {!isActive ? '카메라 미실행' : '초기화 중'}
-                </div>
-              )}
             </div>
 
             {/* Background Upload */}
@@ -313,56 +307,30 @@ export default function ChromaKeyPage() {
               />
             </div>
 
-            {/* Info */}
-            <div className="bg-card border border-border rounded-lg p-6">
-              <h2 className="text-xl font-semibold mb-4">정보</h2>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">해상도:</span>
-                  <span className="font-mono">
-                    {dimensions.width} × {dimensions.height}
-                  </span>
+            {/* Info - Compact */}
+            <div className="bg-card border border-border rounded-lg p-4">
+              <div className="grid grid-cols-2 gap-3 text-xs">
+                <div>
+                  <div className="text-muted-foreground mb-1">해상도</div>
+                  <div className="font-mono text-sm">
+                    {dimensions.width}×{dimensions.height}
+                  </div>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">FPS:</span>
-                  <span className="font-mono">{fps.toFixed(1)}</span>
+                <div>
+                  <div className="text-muted-foreground mb-1">FPS</div>
+                  <div className="font-mono text-sm">{fps.toFixed(1)}</div>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">상태:</span>
-                  <span className={isActive ? 'text-green-500' : 'text-muted-foreground'}>
-                    {isActive ? '실행 중' : '대기 중'}
-                  </span>
+                <div>
+                  <div className="text-muted-foreground mb-1">카메라</div>
+                  <div className={`text-sm ${isActive ? 'text-green-500' : 'text-muted-foreground'}`}>
+                    {isActive ? '✓ 실행' : '대기'}
+                  </div>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">배경 제거:</span>
-                  <span className={isSegmentationActive ? 'text-green-500' : 'text-muted-foreground'}>
-                    {isSegmentationActive ? 'ON' : 'OFF'}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Week 2 Status */}
-            <div className="bg-card border border-border rounded-lg p-6">
-              <h3 className="text-sm font-semibold mb-3 text-muted-foreground">
-                Week 2: ML Integration
-              </h3>
-              <div className="space-y-2 text-sm">
-                <div className="flex items-center gap-2">
-                  <span className="text-green-500">✓</span>
-                  <span>SegmentationEngine</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-green-500">✓</span>
-                  <span>MediaPipe 통합</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-green-500">✓</span>
-                  <span>실시간 마스크 생성</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-green-500">✓</span>
-                  <span>배경 교체 기능</span>
+                <div>
+                  <div className="text-muted-foreground mb-1">배경 제거</div>
+                  <div className={`text-sm ${isSegmentationActive ? 'text-green-500' : 'text-muted-foreground'}`}>
+                    {isSegmentationActive ? '✓ ON' : 'OFF'}
+                  </div>
                 </div>
               </div>
             </div>
