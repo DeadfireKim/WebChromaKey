@@ -17,6 +17,7 @@ export class CanvasCompositor {
       backgroundMode: 'replace',
       blurStrength: 50,
       edgeBlending: 0.1,
+      maskTightness: 0.15, // Default 15% tightness
       ...options,
     };
   }
@@ -67,13 +68,16 @@ export class CanvasCompositor {
       return output;
     }
 
-    // Apply edge feathering to mask for smoother boundaries
-    const featheredMask = this.featherMask(mask, this.options.edgeBlending || 0.1);
+    // Apply mask tightening first to shrink mask closer to person
+    let processedMask = this.tightenMask(mask, this.options.maskTightness || 0);
+
+    // Then apply edge feathering for smoother boundaries
+    processedMask = this.featherMask(processedMask, this.options.edgeBlending || 0.1);
 
     // Handle blur mode
     if (this.options.backgroundMode === 'blur') {
       console.log('[CanvasCompositor] Applying blur, strength:', this.options.blurStrength);
-      return this.composeWithBlur(frame, featheredMask);
+      return this.composeWithBlur(frame, processedMask);
     }
 
     // Handle replace mode
@@ -81,9 +85,9 @@ export class CanvasCompositor {
       this.drawBackground(width, height);
       const bgData = this.ctx.getImageData(0, 0, width, height);
 
-      // Composite foreground with background using feathered mask
+      // Composite foreground with background using processed mask
       for (let i = 0; i < frame.data.length; i += 4) {
-        const maskValue = featheredMask.data[i] / 255; // 0-1, where 1 = foreground
+        const maskValue = processedMask.data[i] / 255; // 0-1, where 1 = foreground
 
         // Blend foreground and background based on mask
         output.data[i] = frame.data[i] * maskValue + bgData.data[i] * (1 - maskValue);
@@ -97,6 +101,40 @@ export class CanvasCompositor {
     }
 
     return output;
+  }
+
+  /**
+   * Tighten mask by applying threshold to shrink it closer to person
+   */
+  private tightenMask(mask: ImageData, tightness: number): ImageData {
+    if (tightness <= 0) return mask;
+
+    const { width, height } = mask;
+    const tightened = new ImageData(width, height);
+
+    // Calculate threshold (0-1 maps to 0-128, meaning we require pixels to be at least this bright)
+    const threshold = Math.round(tightness * 128);
+
+    // Apply threshold - pixels below threshold become 0, above get boosted
+    for (let i = 0; i < mask.data.length; i += 4) {
+      const value = mask.data[i]; // R channel (grayscale mask)
+
+      if (value < threshold) {
+        // Below threshold - make it background
+        tightened.data[i] = 0;
+        tightened.data[i + 1] = 0;
+        tightened.data[i + 2] = 0;
+      } else {
+        // Above threshold - boost contrast
+        const boosted = Math.min(255, ((value - threshold) / (255 - threshold)) * 255);
+        tightened.data[i] = boosted;
+        tightened.data[i + 1] = boosted;
+        tightened.data[i + 2] = boosted;
+      }
+      tightened.data[i + 3] = 255; // Alpha
+    }
+
+    return tightened;
   }
 
   /**

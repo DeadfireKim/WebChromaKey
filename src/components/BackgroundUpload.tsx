@@ -8,10 +8,12 @@ interface BackgroundUploadProps {
   backgroundMode: BackgroundMode;
   blurStrength?: number;
   edgeSmoothing?: number;
+  maskTightness?: number;
   onUpload: (file: File) => Promise<void>;
   onModeChange: (mode: BackgroundMode) => void;
   onBlurStrengthChange?: (strength: number) => void;
   onEdgeSmoothingChange?: (smoothing: number) => void;
+  onMaskTightnessChange?: (tightness: number) => void;
   disabled?: boolean;
 }
 
@@ -20,10 +22,12 @@ export default function BackgroundUpload({
   backgroundMode,
   blurStrength = 50,
   edgeSmoothing = 10,
+  maskTightness = 15,
   onUpload,
   onModeChange,
   onBlurStrengthChange,
   onEdgeSmoothingChange,
+  onMaskTightnessChange,
   disabled = false,
 }: BackgroundUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -179,6 +183,31 @@ export default function BackgroundUpload({
             <span>선명</span>
             <span>부드러움</span>
           </div>
+        </div>
+      )}
+
+      {/* Mask Tightness Slider */}
+      {(backgroundMode === 'blur' || backgroundMode === 'replace') && (
+        <div>
+          <label className="block text-sm font-medium mb-2">
+            마스크 조임: {maskTightness}%
+          </label>
+          <input
+            type="range"
+            min="0"
+            max="50"
+            value={maskTightness}
+            onChange={(e) => onMaskTightnessChange?.(Number(e.target.value))}
+            disabled={disabled}
+            className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary disabled:opacity-50"
+          />
+          <div className="flex justify-between text-xs text-muted-foreground mt-1">
+            <span>느슨함</span>
+            <span>조임</span>
+          </div>
+          <p className="text-xs text-muted-foreground mt-1">
+            외곽선을 사람에게 더 가깝게 조정
+          </p>
         </div>
       )}
 
