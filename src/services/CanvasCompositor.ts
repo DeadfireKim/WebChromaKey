@@ -53,6 +53,9 @@ export class CanvasCompositor {
     const { width, height } = frame;
     const output = new ImageData(width, height);
 
+    // Debug logging
+    console.log('[CanvasCompositor] Mode:', this.options.backgroundMode, 'Mask:', !!mask);
+
     if (this.options.backgroundMode === 'none' || !mask) {
       // No background replacement - return original frame
       output.data.set(frame.data);
@@ -61,6 +64,7 @@ export class CanvasCompositor {
 
     // Handle blur mode
     if (this.options.backgroundMode === 'blur') {
+      console.log('[CanvasCompositor] Applying blur, strength:', this.options.blurStrength);
       return this.composeWithBlur(frame, mask);
     }
 
@@ -91,6 +95,8 @@ export class CanvasCompositor {
    * Compose with blur effect on background
    */
   private composeWithBlur(frame: ImageData, mask: ImageData): ImageData {
+    console.log('[composeWithBlur] START - size:', frame.width, 'x', frame.height);
+
     if (!this.ctx) {
       throw new Error('Canvas context not initialized');
     }
@@ -113,9 +119,11 @@ export class CanvasCompositor {
 
     // Apply blur filter and draw to blur canvas
     const blurAmount = Math.max(1, Math.round((this.options.blurStrength || 50) / 5)); // 1-10px
+    console.log('[composeWithBlur] Blur amount:', blurAmount, 'px');
     blurCtx.filter = `blur(${blurAmount}px)`;
     blurCtx.drawImage(sourceCanvas, 0, 0);
     blurCtx.filter = 'none';
+    console.log('[composeWithBlur] Blur applied');
 
     // Get blurred frame
     const blurredFrame = blurCtx.getImageData(0, 0, width, height);

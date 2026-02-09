@@ -118,14 +118,22 @@ export default function ChromaKeyPage() {
         if (frame && compositorRef.current) {
           let mask: ImageData | undefined;
 
+          // Debug logging
+          console.log('[RenderLoop] isSegmentationActive:', isSegmentationActive,
+                      'isReady:', segmentationRef.current?.isReady());
+
           // Get segmentation mask if active
           if (isSegmentationActive && segmentationRef.current?.isReady()) {
             try {
+              console.log('[RenderLoop] Calling segment...');
               const result = await segmentationRef.current.segment(frame);
               mask = result.mask;
+              console.log('[RenderLoop] Mask received:', !!mask);
             } catch (err) {
-              console.error('Segmentation error:', err);
+              console.error('[RenderLoop] Segmentation error:', err);
             }
+          } else {
+            console.log('[RenderLoop] Segmentation NOT active or NOT ready');
           }
 
           // Compose with or without mask
@@ -136,7 +144,7 @@ export default function ChromaKeyPage() {
           updateFPS();
         }
       } catch (err) {
-        console.error('Render error:', err);
+        console.error('[RenderLoop] Render error:', err);
       }
 
       rafIdRef.current = requestAnimationFrame(render);
