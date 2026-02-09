@@ -195,7 +195,7 @@ export default function BackgroundUpload({
           <input
             type="range"
             min="0"
-            max="50"
+            max="100"
             value={maskTightness}
             onChange={(e) => onMaskTightnessChange?.(Number(e.target.value))}
             disabled={disabled}
@@ -203,10 +203,10 @@ export default function BackgroundUpload({
           />
           <div className="flex justify-between text-xs text-muted-foreground mt-1">
             <span>느슨함</span>
-            <span>조임</span>
+            <span>강하게 조임</span>
           </div>
           <p className="text-xs text-muted-foreground mt-1">
-            외곽선을 사람에게 더 가깝게 조정
+            💡 높을수록 외곽선이 사람에게 바짝 붙음 (20-40% 추천)
           </p>
         </div>
       )}

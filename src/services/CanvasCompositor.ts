@@ -104,37 +104,97 @@ export class CanvasCompositor {
   }
 
   /**
-   * Tighten mask by applying threshold to shrink it closer to person
+   * Tighten mask by applying erosion to shrink it closer to person
    */
   private tightenMask(mask: ImageData, tightness: number): ImageData {
     if (tightness <= 0) return mask;
 
     const { width, height } = mask;
-    const tightened = new ImageData(width, height);
 
-    // Calculate threshold (0-1 maps to 0-128, meaning we require pixels to be at least this bright)
-    const threshold = Math.round(tightness * 128);
+    // Apply threshold first
+    const threshold = Math.round(tightness * 200); // Increased from 128 to 200 for stronger effect
+    let current = new ImageData(width, height);
 
-    // Apply threshold - pixels below threshold become 0, above get boosted
     for (let i = 0; i < mask.data.length; i += 4) {
-      const value = mask.data[i]; // R channel (grayscale mask)
-
+      const value = mask.data[i];
       if (value < threshold) {
-        // Below threshold - make it background
-        tightened.data[i] = 0;
-        tightened.data[i + 1] = 0;
-        tightened.data[i + 2] = 0;
+        current.data[i] = 0;
+        current.data[i + 1] = 0;
+        current.data[i + 2] = 0;
       } else {
-        // Above threshold - boost contrast
         const boosted = Math.min(255, ((value - threshold) / (255 - threshold)) * 255);
-        tightened.data[i] = boosted;
-        tightened.data[i + 1] = boosted;
-        tightened.data[i + 2] = boosted;
+        current.data[i] = boosted;
+        current.data[i + 1] = boosted;
+        current.data[i + 2] = boosted;
       }
-      tightened.data[i + 3] = 255; // Alpha
+      current.data[i + 3] = 255;
     }
 
-    return tightened;
+    // Apply morphological erosion - shrink edges by checking neighbors
+    // Number of erosion iterations based on tightness
+    const iterations = Math.max(1, Math.round(tightness * 6)); // 0-3 iterations
+    console.log('[tightenMask] Applying', iterations, 'erosion iterations');
+
+    for (let iter = 0; iter < iterations; iter++) {
+      const eroded = new ImageData(width, height);
+
+      for (let y = 1; y < height - 1; y++) {
+        for (let x = 1; x < width - 1; x++) {
+          const idx = (y * width + x) * 4;
+          const centerValue = current.data[idx];
+
+          // Check 4-neighbors (faster than 8-neighbors)
+          const top = current.data[((y - 1) * width + x) * 4];
+          const bottom = current.data[((y + 1) * width + x) * 4];
+          const left = current.data[(y * width + (x - 1)) * 4];
+          const right = current.data[(y * width + (x + 1)) * 4];
+
+          // Erosion: take minimum of center and neighbors
+          const minValue = Math.min(centerValue, top, bottom, left, right);
+
+          eroded.data[idx] = minValue;
+          eroded.data[idx + 1] = minValue;
+          eroded.data[idx + 2] = minValue;
+          eroded.data[idx + 3] = 255;
+        }
+      }
+
+      // Handle edges (copy from current)
+      for (let x = 0; x < width; x++) {
+        // Top row
+        const topIdx = x * 4;
+        eroded.data[topIdx] = current.data[topIdx];
+        eroded.data[topIdx + 1] = current.data[topIdx + 1];
+        eroded.data[topIdx + 2] = current.data[topIdx + 2];
+        eroded.data[topIdx + 3] = 255;
+
+        // Bottom row
+        const bottomIdx = ((height - 1) * width + x) * 4;
+        eroded.data[bottomIdx] = current.data[bottomIdx];
+        eroded.data[bottomIdx + 1] = current.data[bottomIdx + 1];
+        eroded.data[bottomIdx + 2] = current.data[bottomIdx + 2];
+        eroded.data[bottomIdx + 3] = 255;
+      }
+      for (let y = 0; y < height; y++) {
+        // Left column
+        const leftIdx = (y * width) * 4;
+        eroded.data[leftIdx] = current.data[leftIdx];
+        eroded.data[leftIdx + 1] = current.data[leftIdx + 1];
+        eroded.data[leftIdx + 2] = current.data[leftIdx + 2];
+        eroded.data[leftIdx + 3] = 255;
+
+        // Right column
+        const rightIdx = (y * width + (width - 1)) * 4;
+        eroded.data[rightIdx] = current.data[rightIdx];
+        eroded.data[rightIdx + 1] = current.data[rightIdx + 1];
+        eroded.data[rightIdx + 2] = current.data[rightIdx + 2];
+        eroded.data[rightIdx + 3] = 255;
+      }
+
+      current = eroded;
+    }
+
+    return current;
   }
 
   /**
