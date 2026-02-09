@@ -174,26 +174,44 @@ export class SegmentationEngine {
       return;
     }
 
-    // Convert segmentation mask to ImageData
-    const mask = results.segmentationMask;
-    const width = mask.width;
-    const height = mask.height;
+    try {
+      const mask = results.segmentationMask;
+      console.log('[handleResults] Mask type:', mask.constructor.name);
+      console.log('[handleResults] Mask properties:', Object.keys(mask));
 
-    // Create ImageData from mask
-    const imageData = new ImageData(width, height);
+      // Check if mask is already an ImageData
+      if (mask instanceof ImageData) {
+        console.log('[handleResults] Mask is already ImageData');
+        this.lastMask = mask;
+        return;
+      }
 
-    // MediaPipe returns mask as Float32Array with values 0-1
-    // Convert to RGBA format (grayscale)
-    for (let i = 0; i < mask.data.length; i++) {
-      const value = mask.data[i] * 255;
-      const idx = i * 4;
-      imageData.data[idx] = value;     // R
-      imageData.data[idx + 1] = value; // G
-      imageData.data[idx + 2] = value; // B
-      imageData.data[idx + 3] = 255;   // A
+      // Check if mask has expected structure
+      if (!mask.width || !mask.height) {
+        console.error('[handleResults] Mask missing width/height:', mask);
+        return;
+      }
+
+      const width = mask.width;
+      const height = mask.height;
+
+      // Create temporary canvas to extract mask data
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d')!;
+
+      // Draw mask to canvas (MediaPipe returns mask as texture)
+      ctx.drawImage(mask, 0, 0, width, height);
+
+      // Extract as ImageData
+      const imageData = ctx.getImageData(0, 0, width, height);
+      console.log('[handleResults] Extracted ImageData:', imageData.width, 'x', imageData.height);
+
+      this.lastMask = imageData;
+    } catch (error) {
+      console.error('[handleResults] Error processing mask:', error);
     }
-
-    this.lastMask = imageData;
   }
 
   /**
