@@ -1,0 +1,140 @@
+'use client';
+
+import { useRef, useState } from 'react';
+import { BackgroundMode } from '@/types/compositor';
+
+interface BackgroundUploadProps {
+  backgroundImage: HTMLImageElement | null;
+  backgroundMode: BackgroundMode;
+  onUpload: (file: File) => Promise<void>;
+  onModeChange: (mode: BackgroundMode) => void;
+  disabled?: boolean;
+}
+
+export default function BackgroundUpload({
+  backgroundImage,
+  backgroundMode,
+  onUpload,
+  onModeChange,
+  disabled = false,
+}: BackgroundUploadProps) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('이미지 파일만 업로드 가능합니다.');
+      return;
+    }
+
+    // Validate file size (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      alert('파일 크기는 10MB 이하여야 합니다.');
+      return;
+    }
+
+    setIsUploading(true);
+    try {
+      await onUpload(file);
+    } catch (error) {
+      console.error('Failed to upload background:', error);
+      alert('배경 이미지 업로드에 실패했습니다.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleButtonClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  return (
+    <div className="space-y-4">
+      {/* Upload Button */}
+      <div>
+        <label className="block text-sm font-medium mb-2">
+          배경 이미지
+        </label>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          disabled={disabled || isUploading}
+          className="hidden"
+        />
+        <button
+          onClick={handleButtonClick}
+          disabled={disabled || isUploading}
+          className="w-full px-4 py-3 border-2 border-dashed border-border rounded-lg hover:border-primary hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isUploading ? (
+            <span className="flex items-center justify-center gap-2">
+              <span className="animate-spin">⏳</span>
+              업로드 중...
+            </span>
+          ) : backgroundImage ? (
+            <span className="flex items-center justify-center gap-2">
+              ✓ 이미지 변경
+            </span>
+          ) : (
+            <span className="flex items-center justify-center gap-2">
+              📁 이미지 선택
+            </span>
+          )}
+        </button>
+      </div>
+
+      {/* Preview */}
+      {backgroundImage && (
+        <div className="relative aspect-video rounded-lg overflow-hidden border border-border">
+          <img
+            src={backgroundImage.src}
+            alt="Background preview"
+            className="w-full h-full object-cover"
+          />
+        </div>
+      )}
+
+      {/* Mode Selector */}
+      <div>
+        <label className="block text-sm font-medium mb-2">
+          배경 모드
+        </label>
+        <div className="grid grid-cols-3 gap-2">
+          {(['replace', 'blur', 'none'] as BackgroundMode[]).map((mode) => (
+            <button
+              key={mode}
+              onClick={() => onModeChange(mode)}
+              disabled={disabled}
+              className={`px-3 py-2 text-sm rounded-md border transition-colors ${
+                backgroundMode === mode
+                  ? 'bg-primary text-primary-foreground border-primary'
+                  : 'bg-background border-border hover:bg-muted'
+              } ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+            >
+              {mode === 'replace' && '교체'}
+              {mode === 'blur' && '블러'}
+              {mode === 'none' && '없음'}
+            </button>
+          ))}
+        </div>
+        <p className="text-xs text-muted-foreground mt-2">
+          {backgroundMode === 'replace' && '배경을 이미지로 교체'}
+          {backgroundMode === 'blur' && '배경을 블러 처리'}
+          {backgroundMode === 'none' && '원본 영상 사용'}
+        </p>
+      </div>
+
+      {/* Info */}
+      <div className="text-xs text-muted-foreground">
+        <p>• 지원 형식: JPG, PNG, WebP</p>
+        <p>• 최대 크기: 10MB</p>
+      </div>
+    </div>
+  );
+}
