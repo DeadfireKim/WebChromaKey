@@ -6,16 +6,20 @@ import { BackgroundMode } from '@/types/compositor';
 interface BackgroundUploadProps {
   backgroundImage: HTMLImageElement | null;
   backgroundMode: BackgroundMode;
+  blurStrength?: number;
   onUpload: (file: File) => Promise<void>;
   onModeChange: (mode: BackgroundMode) => void;
+  onBlurStrengthChange?: (strength: number) => void;
   disabled?: boolean;
 }
 
 export default function BackgroundUpload({
   backgroundImage,
   backgroundMode,
+  blurStrength = 50,
   onUpload,
   onModeChange,
+  onBlurStrengthChange,
   disabled = false,
 }: BackgroundUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -129,6 +133,28 @@ export default function BackgroundUpload({
           {backgroundMode === 'none' && '원본 영상 사용'}
         </p>
       </div>
+
+      {/* Blur Strength Slider */}
+      {backgroundMode === 'blur' && (
+        <div>
+          <label className="block text-sm font-medium mb-2">
+            블러 강도: {blurStrength}%
+          </label>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={blurStrength}
+            onChange={(e) => onBlurStrengthChange?.(Number(e.target.value))}
+            disabled={disabled}
+            className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary disabled:opacity-50"
+          />
+          <div className="flex justify-between text-xs text-muted-foreground mt-1">
+            <span>약함</span>
+            <span>강함</span>
+          </div>
+        </div>
+      )}
 
       {/* Info */}
       <div className="text-xs text-muted-foreground">

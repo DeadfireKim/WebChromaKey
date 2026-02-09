@@ -29,6 +29,7 @@ export default function ChromaKeyPage() {
   const [segmentationQuality, setSegmentationQuality] = useState<SegmentationQuality>('medium');
   const [backgroundMode, setBackgroundMode] = useState<BackgroundMode>('none');
   const [backgroundImage, setBackgroundImage] = useState<HTMLImageElement | null>(null);
+  const [blurStrength, setBlurStrength] = useState(50);
   const [isInitializing, setIsInitializing] = useState(false);
 
   // Refs
@@ -70,9 +71,9 @@ export default function ChromaKeyPage() {
   // Update compositor options
   useEffect(() => {
     if (compositorRef.current) {
-      compositorRef.current.setOptions({ backgroundMode });
+      compositorRef.current.setOptions({ backgroundMode, blurStrength });
     }
-  }, [backgroundMode]);
+  }, [backgroundMode, blurStrength]);
 
   // Update background image
   useEffect(() => {
@@ -278,8 +279,10 @@ export default function ChromaKeyPage() {
               <BackgroundUpload
                 backgroundImage={backgroundImage}
                 backgroundMode={backgroundMode}
+                blurStrength={blurStrength}
                 onUpload={handleBackgroundUpload}
                 onModeChange={setBackgroundMode}
+                onBlurStrengthChange={setBlurStrength}
                 disabled={!isActive}
               />
             </div>
