@@ -6,7 +6,6 @@ import { CanvasCompositor } from '@/services/CanvasCompositor';
 import { SegmentationEngine } from '@/services/SegmentationEngine';
 import { SegmentationQuality } from '@/types/segmentation';
 import { BackgroundMode } from '@/types/compositor';
-import CameraCapture from '@/components/CameraCapture';
 import ControlPanel from '@/components/ControlPanel';
 import BackgroundUpload from '@/components/BackgroundUpload';
 
@@ -231,7 +230,54 @@ export default function ChromaKeyPage() {
           {/* Main Preview */}
           <div className="lg:col-span-2">
             <div className="bg-card border border-border rounded-lg p-6">
-              <h2 className="text-xl font-semibold mb-4">미리보기</h2>
+              {/* Header with Camera Controls */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                <h2 className="text-xl font-semibold">미리보기</h2>
+
+                {/* Camera Controls - Inline */}
+                <div className="flex items-center gap-3">
+                  {/* Camera Select */}
+                  <select
+                    value={selectedDeviceId || ''}
+                    onChange={(e) => setSelectedDeviceId(e.target.value)}
+                    disabled={isActive || devices.length === 0}
+                    className="px-3 py-2 text-sm border border-border rounded-md bg-background disabled:opacity-50 min-w-[180px]"
+                  >
+                    <option value="">기본 카메라</option>
+                    {devices.map((device) => (
+                      <option key={device.deviceId} value={device.deviceId}>
+                        {device.label}
+                      </option>
+                    ))}
+                  </select>
+
+                  {/* Start/Stop Button */}
+                  <button
+                    onClick={async () => {
+                      if (isActive) {
+                        stopCamera();
+                      } else {
+                        await startCamera(selectedDeviceId || undefined);
+                      }
+                    }}
+                    className={`px-4 py-2 text-sm rounded-md font-medium transition-colors whitespace-nowrap ${
+                      isActive
+                        ? 'bg-destructive text-destructive-foreground hover:bg-destructive/90'
+                        : 'bg-primary text-primary-foreground hover:bg-primary/90'
+                    }`}
+                  >
+                    {isActive ? '중지' : '시작'}
+                  </button>
+                </div>
+              </div>
+
+              {/* Error Display */}
+              {error && (
+                <div className="mb-4 p-3 bg-destructive/10 border border-destructive rounded-md">
+                  <p className="text-sm text-destructive">{error}</p>
+                </div>
+              )}
+
               <div className="relative">
                 <canvas
                   ref={canvasRef}
@@ -263,20 +309,6 @@ export default function ChromaKeyPage() {
 
           {/* Controls Sidebar - Scrollable */}
           <div className="space-y-6 max-h-[85vh] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent">
-            {/* Camera Controls */}
-            <div className="bg-card border border-border rounded-lg p-6">
-              <h2 className="text-xl font-semibold mb-4">카메라 설정</h2>
-              <CameraCapture
-                isActive={isActive}
-                selectedDeviceId={selectedDeviceId}
-                error={error}
-                devices={devices}
-                onStart={startCamera}
-                onStop={stopCamera}
-                onDeviceChange={setSelectedDeviceId}
-              />
-            </div>
-
             {/* Segmentation Controls */}
             <div className="bg-card border border-border rounded-lg p-6">
               <h2 className="text-xl font-semibold mb-4">배경 제거</h2>
