@@ -30,6 +30,7 @@ export default function ChromaKeyPage() {
   const [backgroundMode, setBackgroundMode] = useState<BackgroundMode>('none');
   const [backgroundImage, setBackgroundImage] = useState<HTMLImageElement | null>(null);
   const [blurStrength, setBlurStrength] = useState(50);
+  const [edgeSmoothing, setEdgeSmoothing] = useState(10); // 0-100, maps to 0-1 edgeBlending
   const [isInitializing, setIsInitializing] = useState(false);
 
   // Refs
@@ -71,9 +72,13 @@ export default function ChromaKeyPage() {
   // Update compositor options
   useEffect(() => {
     if (compositorRef.current) {
-      compositorRef.current.setOptions({ backgroundMode, blurStrength });
+      compositorRef.current.setOptions({
+        backgroundMode,
+        blurStrength,
+        edgeBlending: edgeSmoothing / 100 // Convert 0-100 to 0-1
+      });
     }
-  }, [backgroundMode, blurStrength]);
+  }, [backgroundMode, blurStrength, edgeSmoothing]);
 
   // Update background image
   useEffect(() => {
@@ -295,9 +300,11 @@ export default function ChromaKeyPage() {
                 backgroundImage={backgroundImage}
                 backgroundMode={backgroundMode}
                 blurStrength={blurStrength}
+                edgeSmoothing={edgeSmoothing}
                 onUpload={handleBackgroundUpload}
                 onModeChange={setBackgroundMode}
                 onBlurStrengthChange={setBlurStrength}
+                onEdgeSmoothingChange={setEdgeSmoothing}
                 disabled={!isActive}
               />
             </div>

@@ -7,6 +7,11 @@ export class CanvasCompositor {
   private backgroundImage: HTMLImageElement | null = null;
   private options: CompositeOptions;
 
+  // Reusable canvases for performance
+  private sourceCanvas: HTMLCanvasElement | null = null;
+  private blurCanvas: HTMLCanvasElement | null = null;
+  private maskCanvas: HTMLCanvasElement | null = null;
+
   constructor(options?: Partial<CompositeOptions>) {
     this.options = {
       backgroundMode: 'replace',
@@ -62,10 +67,13 @@ export class CanvasCompositor {
       return output;
     }
 
+    // Apply edge feathering to mask for smoother boundaries
+    const featheredMask = this.featherMask(mask, this.options.edgeBlending || 0.1);
+
     // Handle blur mode
     if (this.options.backgroundMode === 'blur') {
       console.log('[CanvasCompositor] Applying blur, strength:', this.options.blurStrength);
-      return this.composeWithBlur(frame, mask);
+      return this.composeWithBlur(frame, featheredMask);
     }
 
     // Handle replace mode
@@ -73,9 +81,9 @@ export class CanvasCompositor {
       this.drawBackground(width, height);
       const bgData = this.ctx.getImageData(0, 0, width, height);
 
-      // Composite foreground with background using mask
+      // Composite foreground with background using feathered mask
       for (let i = 0; i < frame.data.length; i += 4) {
-        const maskValue = mask.data[i] / 255; // 0-1, where 1 = foreground
+        const maskValue = featheredMask.data[i] / 255; // 0-1, where 1 = foreground
 
         // Blend foreground and background based on mask
         output.data[i] = frame.data[i] * maskValue + bgData.data[i] * (1 - maskValue);
@@ -92,7 +100,34 @@ export class CanvasCompositor {
   }
 
   /**
-   * Compose with blur effect on background
+   * Apply feathering to mask edges for smoother transitions
+   */
+  private featherMask(mask: ImageData, strength: number): ImageData {
+    const { width, height } = mask;
+
+    // Initialize mask canvas if needed
+    if (!this.maskCanvas) {
+      this.maskCanvas = document.createElement('canvas');
+    }
+    this.maskCanvas.width = width;
+    this.maskCanvas.height = height;
+    const maskCtx = this.maskCanvas.getContext('2d', { willReadFrequently: true })!;
+
+    // Draw mask to canvas
+    maskCtx.putImageData(mask, 0, 0);
+
+    // Apply blur to soften edges (strength 0-1 maps to 0-5px blur)
+    const blurAmount = Math.max(1, Math.round(strength * 10));
+    maskCtx.filter = `blur(${blurAmount}px)`;
+    maskCtx.drawImage(this.maskCanvas, 0, 0);
+    maskCtx.filter = 'none';
+
+    // Extract feathered mask
+    return maskCtx.getImageData(0, 0, width, height);
+  }
+
+  /**
+   * Compose with blur effect on background (optimized with canvas reuse)
    */
   private composeWithBlur(frame: ImageData, mask: ImageData): ImageData {
     console.log('[composeWithBlur] START - size:', frame.width, 'x', frame.height);
@@ -103,16 +138,24 @@ export class CanvasCompositor {
 
     const { width, height } = frame;
 
-    // Create two temporary canvases
-    const sourceCanvas = document.createElement('canvas');
-    sourceCanvas.width = width;
-    sourceCanvas.height = height;
-    const sourceCtx = sourceCanvas.getContext('2d')!;
+    // Initialize reusable canvases if needed
+    if (!this.sourceCanvas) {
+      this.sourceCanvas = document.createElement('canvas');
+    }
+    if (!this.blurCanvas) {
+      this.blurCanvas = document.createElement('canvas');
+    }
 
-    const blurCanvas = document.createElement('canvas');
-    blurCanvas.width = width;
-    blurCanvas.height = height;
-    const blurCtx = blurCanvas.getContext('2d', { willReadFrequently: true })!;
+    // Resize canvases if dimensions changed
+    if (this.sourceCanvas.width !== width || this.sourceCanvas.height !== height) {
+      this.sourceCanvas.width = width;
+      this.sourceCanvas.height = height;
+      this.blurCanvas.width = width;
+      this.blurCanvas.height = height;
+    }
+
+    const sourceCtx = this.sourceCanvas.getContext('2d')!;
+    const blurCtx = this.blurCanvas.getContext('2d', { willReadFrequently: true })!;
 
     // Draw original frame to source canvas
     sourceCtx.putImageData(frame, 0, 0);
@@ -121,7 +164,7 @@ export class CanvasCompositor {
     const blurAmount = Math.max(1, Math.round((this.options.blurStrength || 50) / 5)); // 1-10px
     console.log('[composeWithBlur] Blur amount:', blurAmount, 'px');
     blurCtx.filter = `blur(${blurAmount}px)`;
-    blurCtx.drawImage(sourceCanvas, 0, 0);
+    blurCtx.drawImage(this.sourceCanvas, 0, 0);
     blurCtx.filter = 'none';
     console.log('[composeWithBlur] Blur applied');
 

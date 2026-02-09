@@ -7,9 +7,11 @@ interface BackgroundUploadProps {
   backgroundImage: HTMLImageElement | null;
   backgroundMode: BackgroundMode;
   blurStrength?: number;
+  edgeSmoothing?: number;
   onUpload: (file: File) => Promise<void>;
   onModeChange: (mode: BackgroundMode) => void;
   onBlurStrengthChange?: (strength: number) => void;
+  onEdgeSmoothingChange?: (smoothing: number) => void;
   disabled?: boolean;
 }
 
@@ -17,9 +19,11 @@ export default function BackgroundUpload({
   backgroundImage,
   backgroundMode,
   blurStrength = 50,
+  edgeSmoothing = 10,
   onUpload,
   onModeChange,
   onBlurStrengthChange,
+  onEdgeSmoothingChange,
   disabled = false,
 }: BackgroundUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -152,6 +156,28 @@ export default function BackgroundUpload({
           <div className="flex justify-between text-xs text-muted-foreground mt-1">
             <span>약함</span>
             <span>강함</span>
+          </div>
+        </div>
+      )}
+
+      {/* Edge Smoothing Slider */}
+      {(backgroundMode === 'blur' || backgroundMode === 'replace') && (
+        <div>
+          <label className="block text-sm font-medium mb-2">
+            경계선 부드럽기: {edgeSmoothing}%
+          </label>
+          <input
+            type="range"
+            min="0"
+            max="50"
+            value={edgeSmoothing}
+            onChange={(e) => onEdgeSmoothingChange?.(Number(e.target.value))}
+            disabled={disabled}
+            className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary disabled:opacity-50"
+          />
+          <div className="flex justify-between text-xs text-muted-foreground mt-1">
+            <span>선명</span>
+            <span>부드러움</span>
           </div>
         </div>
       )}
