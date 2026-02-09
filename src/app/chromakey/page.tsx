@@ -172,6 +172,7 @@ export default function ChromaKeyPage() {
   };
 
   const handleToggleSegmentation = (active: boolean) => {
+    console.log('[handleToggleSegmentation] Toggling:', active, 'isActive:', isActive, 'isInitializing:', isInitializing);
     setIsSegmentationActive(active);
   };
 
@@ -279,6 +280,12 @@ export default function ChromaKeyPage() {
                 onQualityChange={handleQualityChange}
                 disabled={!isActive || isInitializing}
               />
+              {/* Debug Info */}
+              {(!isActive || isInitializing) && (
+                <div className="mt-2 p-2 bg-yellow-500/10 border border-yellow-500/20 rounded text-xs text-yellow-600">
+                  ⚠️ 토글 비활성화됨: {!isActive ? '카메라 미실행' : '초기화 중'}
+                </div>
+              )}
             </div>
 
             {/* Background Upload */}
