@@ -307,11 +307,10 @@ export default function ChromaKeyPage() {
             </div>
           </div>
 
-          {/* Controls Sidebar - Scrollable */}
-          <div className="space-y-6 max-h-[85vh] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent">
-            {/* Segmentation Controls */}
-            <div className="bg-card border border-border rounded-lg p-6">
-              <h2 className="text-xl font-semibold mb-4">배경 제거</h2>
+          {/* Controls Sidebar - Compact & Height-matched */}
+          <div className="space-y-3 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent" style={{ maxHeight: 'calc(100vh - 16rem)' }}>
+            {/* Segmentation Controls - No title */}
+            <div className="bg-card border border-border rounded-lg p-4">
               <ControlPanel
                 isSegmentationActive={isSegmentationActive}
                 segmentationQuality={segmentationQuality}
@@ -321,9 +320,8 @@ export default function ChromaKeyPage() {
               />
             </div>
 
-            {/* Background Upload */}
-            <div className="bg-card border border-border rounded-lg p-6">
-              <h2 className="text-xl font-semibold mb-4">배경 이미지</h2>
+            {/* Background Settings - No title */}
+            <div className="bg-card border border-border rounded-lg p-4">
               <BackgroundUpload
                 backgroundImage={backgroundImage}
                 backgroundMode={backgroundMode}
@@ -339,29 +337,25 @@ export default function ChromaKeyPage() {
               />
             </div>
 
-            {/* Info - Compact */}
-            <div className="bg-card border border-border rounded-lg p-4">
-              <div className="grid grid-cols-2 gap-3 text-xs">
-                <div>
-                  <div className="text-muted-foreground mb-1">해상도</div>
-                  <div className="font-mono text-sm">
-                    {dimensions.width}×{dimensions.height}
+            {/* Status Info - Inline */}
+            <div className="bg-card border border-border rounded-lg p-3">
+              <div className="flex items-center justify-between text-xs">
+                <div className="flex items-center gap-4">
+                  <div>
+                    <span className="text-muted-foreground">해상도 </span>
+                    <span className="font-mono">{dimensions.width}×{dimensions.height}</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">FPS </span>
+                    <span className="font-mono">{fps.toFixed(1)}</span>
                   </div>
                 </div>
-                <div>
-                  <div className="text-muted-foreground mb-1">FPS</div>
-                  <div className="font-mono text-sm">{fps.toFixed(1)}</div>
-                </div>
-                <div>
-                  <div className="text-muted-foreground mb-1">카메라</div>
-                  <div className={`text-sm ${isActive ? 'text-green-500' : 'text-muted-foreground'}`}>
-                    {isActive ? '✓ 실행' : '대기'}
+                <div className="flex items-center gap-3">
+                  <div className={`flex items-center gap-1 ${isActive ? 'text-green-500' : 'text-muted-foreground'}`}>
+                    {isActive ? '●' : '○'} 카메라
                   </div>
-                </div>
-                <div>
-                  <div className="text-muted-foreground mb-1">배경 제거</div>
-                  <div className={`text-sm ${isSegmentationActive ? 'text-green-500' : 'text-muted-foreground'}`}>
-                    {isSegmentationActive ? '✓ ON' : 'OFF'}
+                  <div className={`flex items-center gap-1 ${isSegmentationActive ? 'text-green-500' : 'text-muted-foreground'}`}>
+                    {isSegmentationActive ? '●' : '○'} 배경제거
                   </div>
                 </div>
               </div>

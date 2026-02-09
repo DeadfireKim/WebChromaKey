@@ -65,12 +65,9 @@ export default function BackgroundUpload({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {/* Upload Button */}
       <div>
-        <label className="block text-sm font-medium mb-2">
-          배경 이미지
-        </label>
         <input
           ref={fileInputRef}
           type="file"
@@ -114,16 +111,14 @@ export default function BackgroundUpload({
 
       {/* Mode Selector */}
       <div>
-        <label className="block text-sm font-medium mb-2">
-          배경 모드
-        </label>
+        <label className="block text-xs font-medium mb-1.5">배경 모드</label>
         <div className="grid grid-cols-3 gap-2">
           {(['replace', 'blur', 'none'] as BackgroundMode[]).map((mode) => (
             <button
               key={mode}
               onClick={() => onModeChange(mode)}
               disabled={disabled}
-              className={`px-3 py-2 text-sm rounded-md border transition-colors ${
+              className={`px-2 py-1.5 text-sm rounded-md border transition-colors ${
                 backgroundMode === mode
                   ? 'bg-primary text-primary-foreground border-primary'
                   : 'bg-background border-border hover:bg-muted'
@@ -135,19 +130,12 @@ export default function BackgroundUpload({
             </button>
           ))}
         </div>
-        <p className="text-xs text-muted-foreground mt-2">
-          {backgroundMode === 'replace' && '배경을 이미지로 교체'}
-          {backgroundMode === 'blur' && '배경을 블러 처리'}
-          {backgroundMode === 'none' && '원본 영상 사용'}
-        </p>
       </div>
 
       {/* Blur Strength Slider */}
       {backgroundMode === 'blur' && (
         <div>
-          <label className="block text-sm font-medium mb-2">
-            블러 강도: {blurStrength}%
-          </label>
+          <label className="block text-xs font-medium mb-1">블러: {blurStrength}%</label>
           <input
             type="range"
             min="0"
@@ -157,19 +145,13 @@ export default function BackgroundUpload({
             disabled={disabled}
             className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary disabled:opacity-50"
           />
-          <div className="flex justify-between text-xs text-muted-foreground mt-1">
-            <span>약함</span>
-            <span>강함</span>
-          </div>
         </div>
       )}
 
       {/* Edge Smoothing Slider */}
       {(backgroundMode === 'blur' || backgroundMode === 'replace') && (
         <div>
-          <label className="block text-sm font-medium mb-2">
-            경계선 부드럽기: {edgeSmoothing}%
-          </label>
+          <label className="block text-xs font-medium mb-1">경계선: {edgeSmoothing}%</label>
           <input
             type="range"
             min="0"
@@ -179,19 +161,13 @@ export default function BackgroundUpload({
             disabled={disabled}
             className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary disabled:opacity-50"
           />
-          <div className="flex justify-between text-xs text-muted-foreground mt-1">
-            <span>선명</span>
-            <span>부드러움</span>
-          </div>
         </div>
       )}
 
       {/* Mask Tightness Slider */}
       {(backgroundMode === 'blur' || backgroundMode === 'replace') && (
         <div>
-          <label className="block text-sm font-medium mb-2">
-            마스크 조임: {maskTightness}%
-          </label>
+          <label className="block text-xs font-medium mb-1">조임: {maskTightness}%</label>
           <input
             type="range"
             min="0"
@@ -201,21 +177,8 @@ export default function BackgroundUpload({
             disabled={disabled}
             className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary disabled:opacity-50"
           />
-          <div className="flex justify-between text-xs text-muted-foreground mt-1">
-            <span>느슨함</span>
-            <span>강하게 조임</span>
-          </div>
-          <p className="text-xs text-muted-foreground mt-1">
-            💡 높을수록 외곽선이 사람에게 바짝 붙음 (20-40% 추천)
-          </p>
         </div>
       )}
-
-      {/* Info */}
-      <div className="text-xs text-muted-foreground">
-        <p>• 지원 형식: JPG, PNG, WebP</p>
-        <p>• 최대 크기: 10MB</p>
-      </div>
     </div>
   );
 }
