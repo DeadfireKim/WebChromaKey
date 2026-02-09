@@ -97,23 +97,28 @@ export class CanvasCompositor {
 
     const { width, height } = frame;
 
-    // Create temporary canvas for blur
-    const tempCanvas = document.createElement('canvas');
-    tempCanvas.width = width;
-    tempCanvas.height = height;
-    const tempCtx = tempCanvas.getContext('2d', { willReadFrequently: true })!;
+    // Create two temporary canvases
+    const sourceCanvas = document.createElement('canvas');
+    sourceCanvas.width = width;
+    sourceCanvas.height = height;
+    const sourceCtx = sourceCanvas.getContext('2d')!;
 
-    // Draw original frame
-    tempCtx.putImageData(frame, 0, 0);
+    const blurCanvas = document.createElement('canvas');
+    blurCanvas.width = width;
+    blurCanvas.height = height;
+    const blurCtx = blurCanvas.getContext('2d', { willReadFrequently: true })!;
 
-    // Apply blur filter to entire canvas
-    const blurAmount = Math.round((this.options.blurStrength || 50) / 5); // 0-10px
-    tempCtx.filter = `blur(${blurAmount}px)`;
-    tempCtx.drawImage(tempCanvas, 0, 0);
-    tempCtx.filter = 'none';
+    // Draw original frame to source canvas
+    sourceCtx.putImageData(frame, 0, 0);
+
+    // Apply blur filter and draw to blur canvas
+    const blurAmount = Math.max(1, Math.round((this.options.blurStrength || 50) / 5)); // 1-10px
+    blurCtx.filter = `blur(${blurAmount}px)`;
+    blurCtx.drawImage(sourceCanvas, 0, 0);
+    blurCtx.filter = 'none';
 
     // Get blurred frame
-    const blurredFrame = tempCtx.getImageData(0, 0, width, height);
+    const blurredFrame = blurCtx.getImageData(0, 0, width, height);
 
     // Composite: foreground (original) + background (blurred)
     const output = new ImageData(width, height);
