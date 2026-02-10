@@ -33,9 +33,10 @@ class WebChromaKey {
         this.fps = 0;
 
         // Canvas caching
-        this.sourceCanvas = document.createElement('canvas');
-        this.blurCanvas = document.createElement('canvas');
-        this.maskCanvas = document.createElement('canvas');
+        this.videoCanvas = document.createElement('canvas');  // For capturing video frames
+        this.sourceCanvas = document.createElement('canvas'); // For blur source
+        this.blurCanvas = document.createElement('canvas');   // For blur output
+        this.maskCanvas = document.createElement('canvas');   // For mask processing
 
         this.init();
     }
@@ -261,16 +262,15 @@ class WebChromaKey {
 
             try {
                 // Draw video frame to temp canvas first (avoid race condition)
-                const tempCanvas = this.sourceCanvas;
-                const tempCtx = tempCanvas.getContext('2d');
+                const videoCtx = this.videoCanvas.getContext('2d');
 
-                if (tempCanvas.width !== this.canvas.width) {
-                    tempCanvas.width = this.canvas.width;
-                    tempCanvas.height = this.canvas.height;
+                if (this.videoCanvas.width !== this.canvas.width) {
+                    this.videoCanvas.width = this.canvas.width;
+                    this.videoCanvas.height = this.canvas.height;
                 }
 
-                tempCtx.drawImage(this.videoElement, 0, 0, this.canvas.width, this.canvas.height);
-                let frame = tempCtx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+                videoCtx.drawImage(this.videoElement, 0, 0, this.canvas.width, this.canvas.height);
+                let frame = videoCtx.getImageData(0, 0, this.canvas.width, this.canvas.height);
 
                 // Get segmentation mask
                 let mask = null;
