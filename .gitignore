@@ -1,39 +1,10 @@
-# Dependencies
+# Build cache
+.next/
 node_modules/
-/.pnp
-.pnp.js
 
-# Testing
-/coverage
-
-# Next.js
-/.next/
-/out/
-.next
-
-# Production
-/build
-dist/
-
-# Misc
+# OS
 .DS_Store
-*.pem
-
-# Debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Local env files
-.env*.local
-.env
-
-# Vercel
-.vercel
-
-# TypeScript
-*.tsbuildinfo
-next-env.d.ts
+Thumbs.db
 
 # IDE
 .vscode/
@@ -41,9 +12,6 @@ next-env.d.ts
 *.swp
 *.swo
 *~
-
-# OS
-Thumbs.db
 
 # bkit
 .pdca-status.json
