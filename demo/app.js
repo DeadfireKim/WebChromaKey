@@ -220,12 +220,19 @@ class WebChromaKey {
 
         const mask = results.segmentationMask;
         const canvas = document.createElement('canvas');
-        canvas.width = mask.width;
-        canvas.height = mask.height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(mask, 0, 0);
 
-        this.lastMask = ctx.getImageData(0, 0, mask.width, mask.height);
+        // Scale mask to target size (for low quality upscaling)
+        const targetWidth = this.targetMaskWidth || mask.width;
+        const targetHeight = this.targetMaskHeight || mask.height;
+
+        canvas.width = targetWidth;
+        canvas.height = targetHeight;
+        const ctx = canvas.getContext('2d');
+
+        // Draw mask scaled to target size
+        ctx.drawImage(mask, 0, 0, targetWidth, targetHeight);
+
+        this.lastMask = ctx.getImageData(0, 0, targetWidth, targetHeight);
         this.isProcessing = false;
     }
 
@@ -240,11 +247,27 @@ class WebChromaKey {
 
         this.isProcessing = true;
 
+        // Store target mask size for upscaling
+        this.targetMaskWidth = frame.width;
+        this.targetMaskHeight = frame.height;
+
         const tempCanvas = document.createElement('canvas');
-        tempCanvas.width = frame.width;
-        tempCanvas.height = frame.height;
+
+        // Scale down for low quality (faster processing)
+        const scale = this.quality === 'low' ? 0.5 : 1.0;
+        tempCanvas.width = frame.width * scale;
+        tempCanvas.height = frame.height * scale;
+
         const tempCtx = tempCanvas.getContext('2d');
-        tempCtx.putImageData(frame, 0, 0);
+
+        // Create image bitmap from frame
+        const sourceCanvas = document.createElement('canvas');
+        sourceCanvas.width = frame.width;
+        sourceCanvas.height = frame.height;
+        sourceCanvas.getContext('2d').putImageData(frame, 0, 0);
+
+        // Draw scaled version
+        tempCtx.drawImage(sourceCanvas, 0, 0, tempCanvas.width, tempCanvas.height);
 
         await this.segmentationModel.send({ image: tempCanvas });
 
