@@ -129,6 +129,7 @@ class WebChromaKey {
             document.getElementById('resolution').textContent =
                 `${this.canvas.width}×${this.canvas.height}`;
 
+            this.updateAIResolution();
             this.startRendering();
         } catch (error) {
             console.error('Failed to start camera:', error);
@@ -515,6 +516,28 @@ class WebChromaKey {
             this.segmentationModel.setOptions({
                 modelSelection: quality === 'high' ? 1 : 0
             });
+        }
+
+        // Update AI resolution display
+        this.updateAIResolution();
+    }
+
+    updateAIResolution() {
+        const width = this.canvas.width;
+        const height = this.canvas.height;
+        const scale = this.quality === 'low' ? 0.5 : 1.0;
+        const aiWidth = Math.round(width * scale);
+        const aiHeight = Math.round(height * scale);
+
+        const aiResElement = document.getElementById('aiResolution');
+        const qualityElement = document.getElementById('qualityInfo');
+
+        if (aiResElement) {
+            aiResElement.textContent = `${aiWidth}×${aiHeight}`;
+        }
+        if (qualityElement) {
+            const qualityNames = { low: '낮음', medium: '중간', high: '높음' };
+            qualityElement.textContent = qualityNames[this.quality] || '중간';
         }
     }
 
