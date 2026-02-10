@@ -9,7 +9,6 @@ class WebChromaKey {
         this.cameraSelect = document.getElementById('cameraSelect');
         this.startBtn = document.getElementById('startBtn');
         this.stopBtn = document.getElementById('stopBtn');
-        this.segmentationToggle = document.getElementById('segmentationToggle');
         this.bgImageInput = document.getElementById('bgImageInput');
         this.uploadBtn = document.getElementById('uploadBtn');
 
@@ -66,7 +65,6 @@ class WebChromaKey {
     setupEventListeners() {
         this.startBtn.addEventListener('click', () => this.startCamera());
         this.stopBtn.addEventListener('click', () => this.stopCamera());
-        this.segmentationToggle.addEventListener('click', () => this.toggleSegmentation());
         this.uploadBtn.addEventListener('click', () => this.bgImageInput.click());
         this.bgImageInput.addEventListener('change', (e) => this.handleImageUpload(e));
 
@@ -166,9 +164,10 @@ class WebChromaKey {
         document.getElementById('fpsInfo').textContent = '0';
     }
 
-    async toggleSegmentation() {
-        this.isSegmentationActive = !this.isSegmentationActive;
-        this.segmentationToggle.dataset.active = this.isSegmentationActive;
+    async setSegmentationActive(active) {
+        if (this.isSegmentationActive === active) return;
+
+        this.isSegmentationActive = active;
         this.updateStatus('segmentationStatus', this.isSegmentationActive);
 
         if (this.isSegmentationActive && !this.isSegmentationReady) {
@@ -209,7 +208,6 @@ class WebChromaKey {
             console.error('Failed to initialize segmentation:', error);
             alert('배경 제거 초기화 실패: ' + error.message);
             this.isSegmentationActive = false;
-            this.segmentationToggle.dataset.active = 'false';
             this.updateStatus('segmentationStatus', false);
         }
     }
@@ -502,6 +500,10 @@ class WebChromaKey {
         document.querySelectorAll('[data-mode]').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.mode === mode);
         });
+
+        // Auto enable/disable segmentation based on mode
+        const needsSegmentation = mode === 'blur' || mode === 'replace';
+        this.setSegmentationActive(needsSegmentation);
 
         // Show/hide controls
         const showBlur = mode === 'blur';

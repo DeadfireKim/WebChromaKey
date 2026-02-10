@@ -48,29 +48,17 @@
 
             <!-- Controls Section -->
             <div class="controls-section">
-                <!-- Segmentation Controls -->
-                <div class="control-card">
-                    <div class="control-group">
-                        <label class="toggle-label">
-                            <span>배경 제거</span>
-                            <button id="segmentationToggle" class="toggle-btn" data-active="false">
-                                <span class="toggle-slider"></span>
-                            </button>
-                        </label>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label">품질</label>
-                        <div class="btn-group">
-                            <button class="btn-option" data-quality="low">낮음</button>
-                            <button class="btn-option active" data-quality="medium">중간</button>
-                            <button class="btn-option" data-quality="high">높음</button>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Background Settings -->
                 <div class="control-card">
+                    <div class="control-group">
+                        <label class="control-label">배경 모드</label>
+                        <div class="btn-group">
+                            <button class="btn-option" data-mode="replace">교체</button>
+                            <button class="btn-option" data-mode="blur">블러</button>
+                            <button class="btn-option active" data-mode="none">없음</button>
+                        </div>
+                    </div>
+
                     <div class="control-group">
                         <input type="file" id="bgImageInput" accept="image/*" style="display:none;">
                         <button id="uploadBtn" class="btn btn-upload">📁 배경 이미지 선택</button>
@@ -78,11 +66,11 @@
                     </div>
 
                     <div class="control-group">
-                        <label class="control-label">배경 모드</label>
+                        <label class="control-label">AI 품질</label>
                         <div class="btn-group">
-                            <button class="btn-option" data-mode="replace">교체</button>
-                            <button class="btn-option" data-mode="blur">블러</button>
-                            <button class="btn-option active" data-mode="none">없음</button>
+                            <button class="btn-option" data-quality="low">낮음</button>
+                            <button class="btn-option active" data-quality="medium">중간</button>
+                            <button class="btn-option" data-quality="high">높음</button>
                         </div>
                     </div>
 
