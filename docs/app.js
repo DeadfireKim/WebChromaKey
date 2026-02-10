@@ -278,17 +278,6 @@ class WebChromaKey {
                     mask = await this.getSegmentationMask(frame);
                 }
 
-                // Debug info (every 60 frames)
-                if (this.frameCount % 60 === 0) {
-                    console.log('Debug:', {
-                        segmentationActive: this.isSegmentationActive,
-                        segmentationReady: this.isSegmentationReady,
-                        hasMask: !!mask,
-                        backgroundMode: this.backgroundMode,
-                        willCompose: !!(mask && this.backgroundMode !== 'none')
-                    });
-                }
-
                 // Compose with background
                 if (mask && this.backgroundMode !== 'none') {
                     frame = this.composeFrame(frame, mask);
@@ -425,13 +414,6 @@ class WebChromaKey {
 
         // Apply blur
         const blurAmount = Math.max(1, Math.round(this.blurStrength / 5));
-
-        // Debug (once)
-        if (!this.blurDebugLogged) {
-            console.log('Blur applied:', { blurStrength: this.blurStrength, blurAmount });
-            this.blurDebugLogged = true;
-        }
-
         blurCtx.filter = `blur(${blurAmount}px)`;
         blurCtx.drawImage(this.sourceCanvas, 0, 0);
         blurCtx.filter = 'none';
