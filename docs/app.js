@@ -417,6 +417,13 @@ class WebChromaKey {
 
         // Apply blur
         const blurAmount = Math.max(1, Math.round(this.blurStrength / 5));
+
+        // Debug (once)
+        if (!this.blurDebugLogged) {
+            console.log('Blur applied:', { blurStrength: this.blurStrength, blurAmount });
+            this.blurDebugLogged = true;
+        }
+
         blurCtx.filter = `blur(${blurAmount}px)`;
         blurCtx.drawImage(this.sourceCanvas, 0, 0);
         blurCtx.filter = 'none';
