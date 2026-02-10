@@ -20,7 +20,7 @@ class WebChromaKey {
         this.isSegmentationActive = false;
         this.isSegmentationReady = false;
         this.backgroundImage = null;
-        this.backgroundMode = 'blur';
+        this.backgroundMode = 'none';
         this.quality = 'medium';
         this.blurStrength = 50;
         this.edgeSmoothing = 10;
