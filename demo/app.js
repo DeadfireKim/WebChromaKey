@@ -260,9 +260,17 @@ class WebChromaKey {
             if (!this.videoElement || !this.stream) return;
 
             try {
-                // Draw video frame
-                this.ctx.drawImage(this.videoElement, 0, 0, this.canvas.width, this.canvas.height);
-                let frame = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+                // Draw video frame to temp canvas first (avoid race condition)
+                const tempCanvas = this.sourceCanvas;
+                const tempCtx = tempCanvas.getContext('2d');
+
+                if (tempCanvas.width !== this.canvas.width) {
+                    tempCanvas.width = this.canvas.width;
+                    tempCanvas.height = this.canvas.height;
+                }
+
+                tempCtx.drawImage(this.videoElement, 0, 0, this.canvas.width, this.canvas.height);
+                let frame = tempCtx.getImageData(0, 0, this.canvas.width, this.canvas.height);
 
                 // Get segmentation mask
                 let mask = null;
