@@ -1,0 +1,547 @@
+{
+  "timestamp": "2026-02-09T06:27:59.572Z",
+  "reason": "compaction",
+  "status": {
+    "version": "2.0",
+    "lastUpdated": "2026-02-09T06:07:20.534Z",
+    "activeFeatures": [
+      "web-chromakey",
+      "WebChromaKey",
+      "chromakey",
+      "constants",
+      "demo"
+    ],
+    "primaryFeature": "web-chromakey",
+    "features": {
+      "web-chromakey": {
+        "phase": "do",
+        "status": "in_progress",
+        "startedAt": "2026-02-09T02:15:00.000Z",
+        "lastUpdated": "2026-02-09T02:45:00.000Z",
+        "documents": {
+          "plan": "docs/01-plan/features/web-chromakey.plan.md",
+          "design": "docs/02-design/features/web-chromakey.design.md"
+        },
+        "tasks": {
+          "plan": 1,
+          "design": 2,
+          "do": 3
+        }
+      },
+      "WebChromaKey": {
+        "phase": "do",
+        "phaseNumber": 3,
+        "matchRate": null,
+        "iterationCount": 0,
+        "requirements": [],
+        "documents": {},
+        "timestamps": {
+          "started": "2026-02-09T01:43:56.785Z",
+          "lastUpdated": "2026-02-09T05:47:17.209Z"
+        },
+        "lastFile": "C:\\Users\\deadf\\WebChromaKey\\src\\components\\BackgroundUpload.tsx"
+      },
+      "chromakey": {
+        "phase": "do",
+        "phaseNumber": 3,
+        "matchRate": null,
+        "iterationCount": 0,
+        "requirements": [],
+        "documents": {},
+        "timestamps": {
+          "started": "2026-02-09T01:44:56.489Z",
+          "lastUpdated": "2026-02-09T05:45:33.579Z"
+        },
+        "lastFile": "C:\\Users\\deadf\\WebChromaKey\\src\\app\\chromakey\\page.tsx"
+      },
+      "constants": {
+        "phase": "do",
+        "phaseNumber": 3,
+        "matchRate": null,
+        "iterationCount": 0,
+        "requirements": [],
+        "documents": {},
+        "timestamps": {
+          "started": "2026-02-09T01:55:38.202Z",
+          "lastUpdated": "2026-02-09T01:55:38.202Z"
+        },
+        "lastFile": "C:\\Users\\deadf\\WebChromaKey\\src\\constants\\config.ts"
+      },
+      "demo": {
+        "phase": "do",
+        "phaseNumber": 3,
+        "matchRate": null,
+        "iterationCount": 0,
+        "requirements": [],
+        "documents": {},
+        "timestamps": {
+          "started": "2026-02-09T06:07:20.534Z",
+          "lastUpdated": "2026-02-09T06:07:20.534Z"
+        },
+        "lastFile": "C:\\Users\\deadf\\WebChromaKey\\demo\\app.js"
+      }
+    },
+    "pipeline": {
+      "currentPhase": 1,
+      "level": "Dynamic",
+      "phaseHistory": []
+    },
+    "session": {
+      "startedAt": "2026-02-09T01:28:24.644Z",
+      "onboardingCompleted": false,
+      "lastActivity": "2026-02-09T06:07:20.534Z"
+    },
+    "history": [
+      {
+        "feature": "web-chromakey",
+        "action": "plan",
+        "timestamp": "2026-02-09T02:15:00.000Z",
+        "result": "success"
+      },
+      {
+        "feature": "web-chromakey",
+        "action": "design",
+        "timestamp": "2026-02-09T02:30:00.000Z",
+        "result": "success"
+      },
+      {
+        "feature": "web-chromakey",
+        "action": "do",
+        "timestamp": "2026-02-09T02:45:00.000Z",
+        "result": "in_progress"
+      },
+      {
+        "timestamp": "2026-02-09T01:43:56.785Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T01:44:02.188Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T01:44:07.360Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T01:44:38.153Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T01:44:51.704Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T01:44:56.489Z",
+        "feature": "chromakey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T01:45:05.987Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T01:45:12.726Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T01:45:15.034Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T01:45:17.224Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T01:55:38.202Z",
+        "feature": "constants",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T01:55:45.150Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T01:56:04.200Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T01:56:24.671Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T01:56:34.074Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T01:56:48.511Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T01:57:02.110Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T01:57:29.487Z",
+        "feature": "chromakey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T02:00:00.730Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T02:00:17.773Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T02:00:36.585Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T02:01:20.012Z",
+        "feature": "chromakey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T02:06:10.324Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T02:06:19.448Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T02:06:23.412Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T02:06:27.238Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T02:06:37.504Z",
+        "feature": "chromakey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T02:06:39.963Z",
+        "feature": "chromakey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T02:06:44.275Z",
+        "feature": "chromakey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T02:10:25.421Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T02:14:13.083Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T02:14:15.814Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T02:14:19.782Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T02:23:41.800Z",
+        "feature": "chromakey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T02:34:56.720Z",
+        "feature": "chromakey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T02:35:07.965Z",
+        "feature": "chromakey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T02:37:03.571Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T02:43:05.303Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T02:43:21.635Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T02:43:32.772Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T02:43:51.435Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T02:44:10.285Z",
+        "feature": "chromakey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T02:44:18.400Z",
+        "feature": "chromakey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T02:44:34.190Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T02:44:53.187Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T02:45:13.424Z",
+        "feature": "chromakey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T04:08:44.019Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T04:08:52.130Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T04:09:04.432Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T04:09:13.347Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T04:09:24.375Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T04:09:33.717Z",
+        "feature": "chromakey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T04:09:43.154Z",
+        "feature": "chromakey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T04:09:53.785Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T04:10:07.856Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T04:10:16.093Z",
+        "feature": "chromakey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T05:34:25.749Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T05:34:40.077Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T05:39:30.465Z",
+        "feature": "chromakey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T05:39:39.031Z",
+        "feature": "chromakey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T05:39:55.360Z",
+        "feature": "chromakey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T05:40:10.733Z",
+        "feature": "chromakey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T05:42:35.365Z",
+        "feature": "chromakey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T05:42:57.467Z",
+        "feature": "chromakey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T05:43:13.279Z",
+        "feature": "chromakey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T05:45:33.579Z",
+        "feature": "chromakey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T05:45:50.220Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T05:46:10.338Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T05:46:28.637Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T05:46:53.545Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T05:47:17.209Z",
+        "feature": "WebChromaKey",
+        "phase": "do",
+        "action": "updated"
+      },
+      {
+        "timestamp": "2026-02-09T06:07:20.534Z",
+        "feature": "demo",
+        "phase": "do",
+        "action": "updated"
+      }
+    ]
+  }
+}

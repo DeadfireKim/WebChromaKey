@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Chroma Key - 실시간 웹캠 배경 교체</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- MediaPipe Selfie Segmentation -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Web Chroma Key</h1>
+            <p>실시간 웹캠 배경 교체 - MediaPipe Selfie Segmentation</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Preview Section -->
+            <div class="preview-section">
+                <div class="preview-card">
+                    <div class="preview-header">
+                        <h2>미리보기</h2>
+                        <div class="camera-controls">
+                            <select id="cameraSelect" class="camera-select">
+                                <option value="">기본 카메라</option>
+                            </select>
+                            <button id="startBtn" class="btn btn-primary">시작</button>
+                            <button id="stopBtn" class="btn btn-danger" style="display:none;">중지</button>
+                        </div>
+                    </div>
+
+                    <div class="canvas-wrapper">
+                        <canvas id="outputCanvas" width="640" height="480"></canvas>
+                        <div id="fpsDisplay" class="fps-display" style="display:none;">FPS: 0</div>
+                        <div id="loadingOverlay" class="overlay">
+                            <div class="overlay-content">
+                                <div class="spinner">⏳</div>
+                                <p>AI 모델 로딩 중...</p>
+                            </div>
+                        </div>
+                        <div id="readyOverlay" class="overlay">
+                            <p>카메라를 시작해주세요</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls Section -->
+            <div class="controls-section">
+                <!-- Segmentation Controls -->
+                <div class="control-card">
+                    <div class="control-group">
+                        <label class="toggle-label">
+                            <span>배경 제거</span>
+                            <button id="segmentationToggle" class="toggle-btn" data-active="false">
+                                <span class="toggle-slider"></span>
+                            </button>
+                        </label>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">품질</label>
+                        <div class="btn-group">
+                            <button class="btn-option" data-quality="low">낮음</button>
+                            <button class="btn-option active" data-quality="medium">중간</button>
+                            <button class="btn-option" data-quality="high">높음</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Background Settings -->
+                <div class="control-card">
+                    <div class="control-group">
+                        <input type="file" id="bgImageInput" accept="image/*" style="display:none;">
+                        <button id="uploadBtn" class="btn btn-upload">📁 배경 이미지 선택</button>
+                        <div id="bgPreview" class="bg-preview" style="display:none;"></div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">배경 모드</label>
+                        <div class="btn-group">
+                            <button class="btn-option" data-mode="replace">교체</button>
+                            <button class="btn-option" data-mode="blur">블러</button>
+                            <button class="btn-option active" data-mode="none">없음</button>
+                        </div>
+                    </div>
+
+                    <div id="blurControl" class="control-group" style="display:none;">
+                        <label class="control-label">블러: <span id="blurValue">50</span>%</label>
+                        <input type="range" id="blurSlider" min="0" max="100" value="50" class="slider">
+                    </div>
+
+                    <div id="edgeControl" class="control-group" style="display:none;">
+                        <label class="control-label">경계선: <span id="edgeValue">10</span>%</label>
+                        <input type="range" id="edgeSlider" min="0" max="50" value="10" class="slider">
+                    </div>
+
+                    <div id="tightnessControl" class="control-group" style="display:none;">
+                        <label class="control-label">조임: <span id="tightnessValue">15</span>%</label>
+                        <input type="range" id="tightnessSlider" min="0" max="100" value="15" class="slider">
+                    </div>
+                </div>
+
+                <!-- Status Info -->
+                <div class="control-card status-card">
+                    <div class="status-row">
+                        <div class="status-item">
+                            <span class="status-label">해상도</span>
+                            <span id="resolution" class="status-value">640×480</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">FPS</span>
+                            <span id="fpsInfo" class="status-value">0</span>
+                        </div>
+                    </div>
+                    <div class="status-row">
+                        <div class="status-item">
+                            <span id="cameraStatus" class="status-indicator">○ 카메라</span>
+                        </div>
+                        <div class="status-item">
+                            <span id="segmentationStatus" class="status-indicator">○ 배경제거</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
