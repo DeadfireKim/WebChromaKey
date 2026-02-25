@@ -7,6 +7,7 @@
 ## 🎯 프로젝트 개요
 
 웹브라우저에서 **서버 없이** 바로 실행 가능한 AI 기반 실시간 배경 교체 애플리케이션입니다.
+> https://deadfirekim.github.io/WebChromaKey/
 MediaPipe Selfie Segmentation을 활용하여 웹캠 영상의 배경을 실시간으로 제거하고 블러 또는 커스텀 이미지로 교체합니다.
 
 ## ✨ 주요 기능
